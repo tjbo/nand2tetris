@@ -65,6 +65,18 @@ CHIP ALU {
     Not16(in=fBus, out=negatedFBus);
     Mux16(sel=no, a=fBus, b=negatedFBus, out=out, out=combined);
 
-    // pretty sure all my values are correct, just need to make values for zr, and ng... not sure how to output a single
-    // value from a bus. demux?
+    // do zr...
+
+    Add16(a=combined, b=combined, out[0..7]=o1);
+    Add16(a=combined, b=combined, out[8..15]=o2);
+
+
+    Or8Way(in=o1, out=or1);
+    Or8Way(in=o2, out=or2);
+    Or(a=or1, b=or2, out=notZr);
+    Not(in=notZr, out=zr);
+
+    // Not(in=zr, out=ng);
+
+
 }
