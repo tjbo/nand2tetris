@@ -42,5 +42,29 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-   // Put you code here:
+    // make a bus for zx and zero out x values if zx = 1
+    Mux16(sel=zx, a=true, b=false, out=zxBus); 
+    And16(a=x, b=zxBus, out=x0);
+
+    // negate x if nx = 1
+    Not16(in=x0, out= negatedX);
+    Mux16(sel=nx, a=x0, b=negatedX, out=xOut);
+
+    // do the same thing for the Y bus
+    Mux16(sel=zy, a=true, b=false, out=zyBus);
+    And16(a=y, b=zyBus, out=y0);
+
+    Not16(in=y0, out=negatedY);
+    Mux16(sel=ny, a=y0, b=negatedY, out=yOut);
+
+    // add them together?
+    Add16(a=xOut, b=yOut, out=sumOfXY); 
+    And16(a=xOut, b=yOut, out=andedXY);
+    Mux16(sel=f, a=andedXY, b=sumOfXY, out=fBus);
+
+    Not16(in=fBus, out=negatedFBus);
+    Mux16(sel=no, a=fBus, b=negatedFBus, out=out, out=combined);
+
+    // pretty sure all my values are correct, just need to make values for zr, and ng... not sure how to output a single
+    // value from a bus. demux?
 }
