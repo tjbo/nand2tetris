@@ -66,17 +66,12 @@ CHIP ALU {
     Mux16(sel=no, a=fBus, b=negatedFBus, out=out, out=combined);
 
     // do zr...
-
     Add16(a=combined, b=combined, out[0..7]=o1);
-    Add16(a=combined, b=combined, out[8..15]=o2);
-
+    Add16(a=combined, b=combined, out[8..15]=o2, out[15]=negative);
 
     Or8Way(in=o1, out=or1);
     Or8Way(in=o2, out=or2);
     Or(a=or1, b=or2, out=notZr);
     Not(in=notZr, out=zr);
-
-    // Not(in=zr, out=ng);
-
-
+    And(a=negative, b=true, out=ng);
 }
