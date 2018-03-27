@@ -16,5 +16,13 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    // increment
+    Inc16(in=ram, out=out2);
+    // reset or load
+    Mux16(a=in, b=false, sel=reset, out=out1);
+    Or(a=reset, b=load, out=isLoadedOrReset);
+    Mux16(a=out2, b=out1, sel=isLoadedOrReset, out=state);
+    // should we load, or just let register return?
+    Or8Way(in[0]=inc, in[1]=load, in[2]=reset, out=load1);
+    Register(in=state, load=load1, out=out, out=ram);
 }
