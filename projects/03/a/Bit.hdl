@@ -12,7 +12,9 @@
 CHIP Bit {
     IN in, load;
     OUT out;
-
+    
     PARTS:
-    // Put your code here:
+    Mux(a=dff1, b=in, sel=load, out=mux);
+    // the dff has 2 outs, one is fed back into input...
+    DFF(in=mux, out=dff1, out=out);
 }
